@@ -7,14 +7,14 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="row">
                     <h1>
-                        Solicitudes {{ trans('ticket.'.Route::currentRouteName()) }}
+                        {{ $title = trans(Route::currentRouteName().'_title') }}
                         <a href="#" class="btn btn-primary">
                             Nueva solicitud
                         </a>
                     </h1>
 
                     <p class="label label-info news">
-                        Hay {{ $tickets->total() }} Solicitudes {{ trans('ticket.'.Route::currentRouteName()) }}
+                        {{ Lang::choice(Route::currentRouteName().'_total', $tickets->total()) }}
                     </p>
                     @foreach ($tickets as $ticket)
                         @include('tickets/partials/item', compact('ticket'))
