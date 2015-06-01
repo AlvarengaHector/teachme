@@ -7,14 +7,14 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="row">
                     <h1>
-                        Solicitudes Recientes
+                        Solicitudes {{ trans('ticket.'.Route::currentRouteName()) }}
                         <a href="#" class="btn btn-primary">
                             Nueva solicitud
                         </a>
                     </h1>
 
                     <p class="label label-info news">
-                        Hay {{ $tickets->total() }} Solicitudes Recientes
+                        Hay {{ $tickets->total() }} Solicitudes {{ trans('ticket.'.Route::currentRouteName()) }}
                     </p>
                     @foreach ($tickets as $ticket)
                         @include('tickets/partials/item', compact('ticket'))

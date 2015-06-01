@@ -1,6 +1,7 @@
 <?php namespace TeachMe\Http\Controllers;
 
 use TeachMe\Entities\Ticket;
+use TeachMe\Entities\TicketComment;
 use TeachMe\Http\Requests;
 use TeachMe\Http\Controllers\Controller;
 
@@ -24,19 +25,25 @@ class TicketsController extends Controller {
 	{
 		$tickets = Ticket::orderBy('created_at', 'DESC')->where('status','open')->paginate(20);
 
-		return view('tickets.open', compact('tickets'));
+		return view('tickets.list', compact('tickets'));
 	}
 
 	public function closed()
 	{
 		$tickets = Ticket::orderBy('created_at', 'DESC')->where('status','closed')->paginate(20);
 
-		return view('tickets.closed', compact('tickets'));
+		return view('tickets.list', compact('tickets'));
 	}
 
 	public function details($id)
 	{
 		$ticket = Ticket::findOrFail($id);
+		
+		/*$comments = TicketComment::select('ticket_comments.*', 'users.name')
+			->join('users', 'ticket_comments.user_id', '=', 'users.id')
+			->where('ticket_id', $id)
+			->paginate();*/
+
 		return view('tickets/details', compact('ticket'));
 	}
 
