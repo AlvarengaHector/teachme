@@ -24,27 +24,40 @@
                     @endforeach
                 </p>
 
-                <form method="POST" action="http://teachme.dev/votar/5" accept-charset="UTF-8"><input name="_token" type="hidden" value="VBIv3EWDAIQuLRW0cGwNQ4OsDKoRhnK2fAEF6UbQ">
-                    <!--button type="submit" class="btn btn-primary">Votar</button-->
+                {!! Form::open(['method'=>'POST', 'route'=>['votes.submit', $ticket->id] ]) !!}
+                
                     <button type="submit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-thumbs-up"></span> Votar
                     </button>
-                </form>
+                
+                {!! Form::close() !!}
+
+                {!! Form::open(['method'=>'DELETE', 'route'=>['votes.destroy', $ticket->id] ]) !!}
+                
+                    <button type="submit" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-thumbs-up"></span> Quitar voto
+                    </button>
+                
+                {!! Form::close() !!}
 
                 <h3>Nuevo Comentario</h3>
 
+                {!! Form::open(['method'=>'POST', 'route'=>['comentar.create', $ticket->id] ]) !!}
+                
+                    <div class="form-group">
+                        {!! Form::label('comment', 'Comentarios:') !!}
+                        {!! Form::textarea('comment', null, ['cols'=>'50','rows'=>'4','class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('link', 'Enlace:') !!}
+                        {!! Form::text('link', null, ['class'=>'form-control']) !!}
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Enviar comentario
+                    </button>
+                
+                {!! Form::close() !!}
 
-                <form method="POST" action="http://teachme.dev/comentar/5" accept-charset="UTF-8"><input name="_token" type="hidden" value="VBIv3EWDAIQuLRW0cGwNQ4OsDKoRhnK2fAEF6UbQ">
-                    <div class="form-group">
-                        <label for="comment">Comentarios:</label>
-                        <textarea rows="4" class="form-control" name="comment" cols="50" id="comment"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="link">Enlace:</label>
-                        <input class="form-control" name="link" type="text" id="link">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar comentario</button>
-                </form>
 
                 <h3>Comentarios ({{ count($ticket->comments) }})</h3>
                 
