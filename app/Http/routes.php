@@ -11,32 +11,49 @@
 	|
 */
 
-Route::get('/', [
-	'as'	=> 'tickets.latest',
-	'uses'	=> 'TicketsController@latest'
-]);
+/**
+ * Public routes without auth...
+ */
 
-Route::get('/populares', [
-	'as'	=> 'tickets.popular',
-	'uses'	=> 'TicketsController@popular'
-]);
+	Route::get('/', [
+		'as'	=> 'tickets.latest',
+		'uses'	=> 'TicketsController@latest'
+	]);
 
-Route::get('/pendientes', [
-	'as'	=> 'tickets.open',
-	'uses'	=> 'TicketsController@open'
-]);
+	Route::get('/populares', [
+		'as'	=> 'tickets.popular',
+		'uses'	=> 'TicketsController@popular'
+	]);
 
-Route::get('/tutoriales', [
-	'as'	=> 'tickets.closed',
-	'uses'	=> 'TicketsController@closed'
-]);
+	Route::get('/pendientes', [
+		'as'	=> 'tickets.open',
+		'uses'	=> 'TicketsController@open'
+	]);
 
-Route::get('/solicitud/{id}', [
-	'as'	=> 'tickets.details',
-	'uses'	=> 'TicketsController@details'
-]);
+	Route::get('/tutoriales', [
+		'as'	=> 'tickets.closed',
+		'uses'	=> 'TicketsController@closed'
+	]);
+
+	Route::get('/solicitud/{id}', [
+		'as'	=> 'tickets.details',
+		'uses'	=> 'TicketsController@details'
+	]);
+
+/**
+ * Routes with Auth...
+ */
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::group(['middleware' => 'auth'], function() {
+	
+	Route::get('/solicitar', [
+		'as' 	=> 'tickets.create',
+		'uses' 	=> 'TicketsController@create'
+	]);
+
+});
