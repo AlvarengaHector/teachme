@@ -54,8 +54,24 @@ class TicketsController extends Controller {
 
 	public function store(Request $request)
 	{
-		// return "[Store Method]";
-		dd($request->all());
+		$this->validate($request, [
+			'title' => 'required|max:120'
+		]);
+
+		// Very important the 'protected $fillable' in the Model
+
+		$ticket = \Auth::user()->tickets()->create([
+			'title'		=> $request->get('title'),
+			'status'	=> 'open'
+		]);
+
+		/*$ticket = new Ticket();
+		$ticket->title = $request->get('title');
+		$ticket->status = 'open';
+		$ticket->user_id = \Auth::user()->id;
+		$ticket->save();*/
+
+		return redirect()->route('tickets.details', $ticket->id);
 	}
 
 }

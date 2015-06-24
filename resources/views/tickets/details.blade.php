@@ -12,7 +12,7 @@
                 </h2>
                 <p class="date-t">
                     <span class="glyphicon glyphicon-time"></span>
-                    {{ $ticket->created_at->format('d/m/Y h:ia') }}
+                    {{ $ticket->created_at->format('d/m/Y h:ia') }} - {{ $ticket->author->name }}
                 </p>
                 <h4 class="label label-info news">
                     {{ count($ticket->voters) }} votos
@@ -35,7 +35,7 @@
                 {!! Form::open(['method'=>'DELETE', 'route'=>['votes.destroy', $ticket->id] ]) !!}
                 
                     <button type="submit" class="btn btn-danger">
-                        <span class="glyphicon glyphicon-thumbs-up"></span> Quitar voto
+                        <span class="glyphicon glyphicon-thumbs-down"></span> Quitar voto
                     </button>
                 
                 {!! Form::close() !!}

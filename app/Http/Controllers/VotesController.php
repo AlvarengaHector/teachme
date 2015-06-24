@@ -9,12 +9,12 @@ class VotesController extends Controller {
 
 	public function submit($id)
 	{
-		dd("votando por el ticket");
+		dd("votando por el ticket: " . $id);
 	}
 
 	public function destroy($id)
 	{
-		dd("quitando voto al ticket");
+		dd("quitando voto al ticket: " . $id);
 	}
 
 }
