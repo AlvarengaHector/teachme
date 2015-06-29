@@ -6,36 +6,23 @@ use TeachMe\Http\Requests;
 use TeachMe\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use TeachMe\Repositories\TicketRepository;
 
 class TicketsController extends Controller {
 
-	protected function selectTicketsList()
-	{
+	/**
+	 * @var $ticketRepository
+	 */
+	
+	private $ticketRepository;
 
-		/*
-		
-			SELECT
-			    t.*,
-			    ( SELECT COUNT(*) FROM ticket_comments c WHERE c.ticket_id = t.id ) as num_comments,
-			    ( SELECT COUNT(*) FROM ticket_votes v WHERE v.ticket_id = t.id ) as num_votes
-			FROM `tickets` t
-			WHERE 1
-
-		*/
-
-		return Ticket::selectRaw(
-			'tickets.*, '
-			. '( SELECT COUNT(*) FROM ticket_comments WHERE ticket_comments.ticket_id = tickets.id ) as num_comments,'
-			. '( SELECT COUNT(*) FROM ticket_votes WHERE ticket_votes.ticket_id = tickets.id ) as num_votes'
-		)->with('author'); // eager loading
+	function __construct(TicketRepository $ticketRepository) {
+		$this->ticketRepository = $ticketRepository;
 	}
 
 	public function latest()
 	{
-
-		$tickets = $this->selectTicketsList()
-			->orderBy('created_at', 'DESC')
-			->paginate(20);
+		$tickets = $this->ticketRepository->paginateLatest();
 
 		return view('tickets.list', compact('tickets'));
 	}
@@ -47,27 +34,21 @@ class TicketsController extends Controller {
 
 	public function open()
 	{
-		$tickets = $this->selectTicketsList()
-			->orderBy('created_at', 'DESC')
-			->where('status','open')
-			->paginate(20);
+		$tickets = $this->ticketRepository->paginateOpen();
 
 		return view('tickets.list', compact('tickets'));
 	}
 
 	public function closed()
 	{
-		$tickets = $this->selectTicketsList()
-			->orderBy('created_at', 'DESC')
-			->where('status','closed')
-			->paginate(20);
+		$tickets = $this->ticketRepository->paginateClosed();
 
 		return view('tickets.list', compact('tickets'));
 	}
 
 	public function details($id)
 	{
-		$ticket = Ticket::findOrFail($id);
+		$ticket = $this->ticketRepository->findOrFail($id);
 		
 		/*$comments = TicketComment::select('ticket_comments.*', 'users.name')
 			->join('users', 'ticket_comments.user_id', '=', 'users.id')
